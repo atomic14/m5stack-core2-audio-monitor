@@ -16,7 +16,7 @@ void I2SSampler::addSample(int16_t sample)
         // reset the buffer position
         m_audioBufferPos = 0;
         // tell the writer task to save the data
-        xTaskNotify(m_writerTaskHandle, 1, eIncrement);
+        xTaskNotify(m_processorTaskHandle, 1, eIncrement);
     }
 }
 
@@ -48,10 +48,10 @@ void i2sReaderTask(void *param)
     }
 }
 
-void I2SSampler::start(i2s_port_t i2sPort, const i2s_pin_config_t &i2sPins, const i2s_config_t &i2sConfig, int32_t bufferSizeInSamples, TaskHandle_t writerTaskHandle)
+void I2SSampler::start(i2s_port_t i2sPort, const i2s_pin_config_t &i2sPins, const i2s_config_t &i2sConfig, int32_t bufferSizeInSamples, TaskHandle_t processorTaskHandle)
 {
     m_i2sPort = i2sPort;
-    m_writerTaskHandle = writerTaskHandle;
+    m_processorTaskHandle = processorTaskHandle;
     m_bufferSizeInSamples = bufferSizeInSamples;
     m_bufferSizeInBytes = bufferSizeInSamples * sizeof(int16_t);
     m_audioBuffer1 = (int16_t *)malloc(m_bufferSizeInBytes);
@@ -60,10 +60,11 @@ void I2SSampler::start(i2s_port_t i2sPort, const i2s_pin_config_t &i2sPins, cons
     m_currentAudioBuffer = m_audioBuffer1;
     m_capturedAudioBuffer = m_audioBuffer2;
 
-    m_writerTaskHandle = writerTaskHandle;
     //install and start i2s driver
     i2s_driver_install(m_i2sPort, &i2sConfig, 4, &m_i2sQueue);
     i2s_set_pin(i2sPort, &i2sPins);
+    i2s_set_clk(i2sPort, i2sConfig.sample_rate, i2sConfig.bits_per_sample, I2S_CHANNEL_MONO);
+    // i2s_set_pdm_rx_down_sample(i2sPort, I2S_PDM_DSR_8S);
     // start a task to read samples from the ADC
     TaskHandle_t readerTaskHandle;
     xTaskCreatePinnedToCore(i2sReaderTask, "i2s Reader Task", 8192, this, 1, &readerTaskHandle, 0);

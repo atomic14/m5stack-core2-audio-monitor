@@ -1,6 +1,6 @@
 #include <M5Touch.h>
 #include "Application.h"
-#include "I2SSampler.h"
+#include "I2S/I2SSampler.h"
 #include "UI/UI.h"
 #include "AudioProcessing/Processor.h"
 
@@ -11,7 +11,7 @@ void processing_task(void *param)
   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100);
   while (true)
   {
-    // wait for some samples to save
+    // wait for some samples to process
     uint32_t ulNotificationValue = ulTaskNotifyTake(pdTRUE, xMaxBlockTime);
     if (ulNotificationValue > 0)
     {
@@ -51,6 +51,7 @@ void Application::loop()
   if (m_touch.ispressed())
   {
     m_ui->toggle_display();
+    // delay to allow for the touch to finish
     vTaskDelay(pdMS_TO_TICKS(500));
   }
 }

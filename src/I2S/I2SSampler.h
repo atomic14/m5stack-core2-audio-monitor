@@ -25,8 +25,8 @@ private:
     int32_t m_bufferSizeInSamples;
     // I2S reader task
     TaskHandle_t m_readerTaskHandle;
-    // writer task
-    TaskHandle_t m_writerTaskHandle;
+    // processor task
+    TaskHandle_t m_processorTaskHandle;
     // i2s reader queue
     QueueHandle_t m_i2sQueue;
     // i2s port
@@ -46,7 +46,7 @@ public:
     {
         return m_capturedAudioBuffer;
     }
-    void start(i2s_port_t i2sPort, const i2s_pin_config_t &i2sPins, const i2s_config_t &i2sConfig, int32_t bufferSizeInSamples, TaskHandle_t writerTaskHandle);
+    void start(i2s_port_t i2sPort, const i2s_pin_config_t &i2sPins, const i2s_config_t &i2sConfig, int32_t bufferSizeInSamples, TaskHandle_t processorTaskHandle);
 
     friend void i2sReaderTask(void *param);
 };

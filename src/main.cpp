@@ -3,7 +3,8 @@
 #include <driver/i2s.h>
 #include "Application.h"
 
-#define WINDOW_SIZE 480
+// approx 30ms of audio @ 16KHz
+#define WINDOW_SIZE 512
 
 // i2s config for reading from both m5stack mic
 i2s_config_t i2s_config = {
@@ -29,16 +30,21 @@ Application *application;
 void setup()
 {
   Serial.begin(115200);
-  M5.begin(true, false, false, false);
+  M5.begin(
+      true,  // LCDEnable
+      false, // SDEnable
+      false, // SerialEnable !important
+      false  // I2CEnable
+  );
   M5.Lcd.setBrightness(255);
   M5.Lcd.fillScreen(TFT_BLACK);
-  Serial.println("Started up");
-
+  // create our application
   application = new Application(M5.Lcd, M5.Touch, WINDOW_SIZE);
   application->begin(i2s_config, i2s_pins);
 }
 
 void loop()
 {
+  // service the application
   application->loop();
 }
