@@ -36,7 +36,7 @@ void setup()
       false, // SerialEnable !important
       false  // I2CEnable
   );
-  M5.Lcd.setBrightness(255);
+  M5.Axp.SetLcdVoltage(3000);
   M5.Lcd.fillScreen(TFT_BLACK);
   // create our application
   application = new Application(M5.Lcd, M5.Touch, WINDOW_SIZE);
