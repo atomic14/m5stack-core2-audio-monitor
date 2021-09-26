@@ -35,12 +35,12 @@ void i2sReaderTask(void *param)
                 do
                 {
                     // read data from the I2S peripheral
-                    int16_t i2sData[1024];
+                    int16_t i2sData[2048];
                     // read from i2s
-                    i2s_read(sampler->m_i2sPort, i2sData, 2048, &bytesRead, 10);
-                    for (int i = 0; i < bytesRead / 2; i++)
+                    i2s_read(sampler->m_i2sPort, i2sData, 4096, &bytesRead, 10);
+                    for (int i = 0; i < bytesRead / 2; i += 4)
                     {
-                        sampler->addSample(i2sData[i]);
+                        sampler->addSample((i2sData[i] + i2sData[i + 1] + i2sData[i + 2] + i2sData[i + 3]) / 4);
                     }
                 } while (bytesRead > 0);
             }
