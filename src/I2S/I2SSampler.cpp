@@ -60,7 +60,7 @@ void I2SSampler::start(i2s_port_t i2sPort, const i2s_pin_config_t &i2sPins, cons
     m_currentAudioBuffer = m_audioBuffer1;
     m_capturedAudioBuffer = m_audioBuffer2;
 
-    //install and start i2s driver
+    // install and start i2s driver
     i2s_driver_install(m_i2sPort, &i2sConfig, 4, &m_i2sQueue);
     i2s_set_pin(i2sPort, &i2sPins);
     i2s_set_clk(i2sPort, i2sConfig.sample_rate, i2sConfig.bits_per_sample, I2S_CHANNEL_MONO);

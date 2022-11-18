@@ -38,6 +38,9 @@ void setup()
   );
   M5.Axp.SetLcdVoltage(3000);
   M5.Lcd.fillScreen(TFT_BLACK);
+  // M5Core grabs I2S_NUM_0 so let's get it back
+  i2s_driver_uninstall(I2S_NUM_0);
+
   // create our application
   application = new Application(M5.Lcd, M5.Touch, WINDOW_SIZE);
   application->begin(i2s_config, i2s_pins);
