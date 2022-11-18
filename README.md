@@ -11,10 +11,8 @@ You'll need to use PlatformIO to build the project.
 To clone the repo use:
 
 ```
-git clone --recursive git@github.com:atomic14/m5stack-core2-audio-monitor.git
+git clone git@github.com:atomic14/m5stack-core2-audio-monitor.git
 ```
-
-This will make sure you get the M5Core2 library as well.
 
 Hopefully, the code should be easy to understand.
 
