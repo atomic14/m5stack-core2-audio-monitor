@@ -37,7 +37,10 @@ void Processor::update(int16_t *samples)
     input_avg += double(input_sample) / double(m_window_size);
   }
 
-  // Remove DC offset.
+  // Remove any DC offset. Various M5Stack Core2 devices have shown different DC
+  // offsets in their recordings, and this resolves that at least for the
+  // sampling window. This does mean that signals with periods longer than the
+  // sampling window will be negatively affected.
   for (int i = 0; i < m_window_size; i++) {
     m_fft_input[offset + i] -= input_avg;
   }
