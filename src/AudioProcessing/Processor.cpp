@@ -46,7 +46,7 @@ void Processor::update(int16_t *samples)
   m_hamming_window->applyWindow(m_fft_input);
 
   // do the fft
-  kiss_fftr(m_cfg, m_fft_input, reinterpret_cast<kiss_fft_cpx *>(m_fft_output));
+  kiss_fftr(m_cfg, m_fft_input, m_fft_output);
 
   for (int i = 0; i < m_window_size / 4; i++) {
     const float real = m_fft_output[i].r;
