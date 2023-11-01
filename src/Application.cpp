@@ -1,20 +1,19 @@
 #include <M5Touch.h>
+
 #include "Application.h"
+#include "AudioProcessing/Processor.h"
 #include "I2S/I2SSampler.h"
 #include "UI/UI.h"
-#include "AudioProcessing/Processor.h"
 
 // Task to process samples
 void processing_task(void *param)
 {
   Application *application = (Application *)param;
   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100);
-  while (true)
-  {
+  while (true) {
     // wait for some samples to process
     uint32_t ulNotificationValue = ulTaskNotifyTake(pdTRUE, xMaxBlockTime);
-    if (ulNotificationValue > 0)
-    {
+    if (ulNotificationValue > 0) {
       application->process_samples();
     }
   }
@@ -32,7 +31,8 @@ void Application::begin(const i2s_config_t &i2s_config, const i2s_pin_config_t &
 {
   // set up the processing
   TaskHandle_t processing_task_handle;
-  xTaskCreatePinnedToCore(processing_task, "Processing Task", 4096, this, 2, &processing_task_handle, 0);
+  xTaskCreatePinnedToCore(
+      processing_task, "Processing Task", 4096, this, 2, &processing_task_handle, 0);
 
   // start sampling from i2s device
   m_sampler->start(I2S_NUM_0, i2s_pins, i2s_config, m_window_size, processing_task_handle);
@@ -48,8 +48,7 @@ void Application::process_samples()
 
 void Application::loop()
 {
-  if (m_touch.ispressed())
-  {
+  if (m_touch.ispressed()) {
     m_ui->toggle_display();
     // delay to allow for the touch to finish
     vTaskDelay(pdMS_TO_TICKS(500));

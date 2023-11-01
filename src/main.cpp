@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <M5Core2.h>
 #include <driver/i2s.h>
+
 #include "Application.h"
 
 // approx 30ms of audio @ 16KHz
@@ -19,22 +20,20 @@ i2s_config_t i2s_config = {
 };
 
 // i2s pins
-i2s_pin_config_t i2s_pins = {
-    .bck_io_num = GPIO_NUM_12,
-    .ws_io_num = GPIO_NUM_0,
-    .data_out_num = I2S_PIN_NO_CHANGE,
-    .data_in_num = GPIO_NUM_34};
+i2s_pin_config_t i2s_pins = {.bck_io_num = GPIO_NUM_12,
+                             .ws_io_num = GPIO_NUM_0,
+                             .data_out_num = I2S_PIN_NO_CHANGE,
+                             .data_in_num = GPIO_NUM_34};
 
 Application *application;
 
 void setup()
 {
   Serial.begin(115200);
-  M5.begin(
-      true,  // LCDEnable
-      false, // SDEnable
-      false, // SerialEnable !important
-      false  // I2CEnable
+  M5.begin(true,   // LCDEnable
+           false,  // SDEnable
+           false,  // SerialEnable !important
+           false   // I2CEnable
   );
   M5.Axp.SetLcdVoltage(3000);
   M5.Lcd.fillScreen(TFT_BLACK);

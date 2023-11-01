@@ -8,9 +8,8 @@ class I2SSampler;
 class M5Display;
 class M5Touch;
 
-class Application
-{
-private:
+class Application {
+ private:
   int m_window_size;
   UI *m_ui;
   Processor *m_processor;
@@ -19,7 +18,7 @@ private:
 
   void process_samples();
 
-public:
+ public:
   Application(M5Display &display, M5Touch &touch, int window_size);
   void begin(const i2s_config_t &i2s_config, const i2s_pin_config_t &i2s_pins);
   void loop();

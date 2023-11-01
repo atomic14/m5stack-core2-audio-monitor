@@ -2,17 +2,17 @@
 
 #pragma once
 
-#include <stdint.h>
 #include <algorithm>
+#include <stdint.h>
+
 
 #undef min
 
-class Palette
-{
-protected:
+class Palette {
+ protected:
   uint16_t colors[256];
 
-public:
+ public:
   Palette();
   inline uint16_t get_color(int index)
   {

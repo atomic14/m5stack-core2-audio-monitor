@@ -1,9 +1,8 @@
 #pragma once
 #include <stdint.h>
 
-class Bitmap
-{
-public:
+class Bitmap {
+ public:
   uint16_t *pixels;
   uint16_t **rows;
   uint16_t width;

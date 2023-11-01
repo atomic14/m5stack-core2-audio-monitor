@@ -1,4 +1,5 @@
-#include "Arduino.h"
+#include <Arduino.h>
+
 #include "Bitmap.h"
 
 Bitmap::Bitmap(int width, int height)
@@ -7,14 +8,11 @@ Bitmap::Bitmap(int width, int height)
   this->height = height;
   pixels = (uint16_t *)ps_malloc(width * height * sizeof(uint16_t));
   rows = (uint16_t **)malloc(height * sizeof(uint16_t **));
-  for (int i = 0; i < height; i++)
-  {
+  for (int i = 0; i < height; i++) {
     rows[i] = pixels + width * i;
   }
-  for (int y = 0; y < height; y++)
-  {
-    for (int x = 0; x < width; x++)
-    {
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
       rows[y][x] = 0;
     }
   }
@@ -22,8 +20,7 @@ Bitmap::Bitmap(int width, int height)
 
 void Bitmap::scroll_left()
 {
-  for (int y = 0; y < height; y++)
-  {
+  for (int y = 0; y < height; y++) {
     memmove(rows[y], rows[y] + 1, this->width * sizeof(uint16_t) - 1);
   }
 }
