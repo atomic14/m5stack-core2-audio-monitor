@@ -11,7 +11,7 @@ You'll need to use PlatformIO to build the project.
 To clone the repo use:
 
 ```
-git clone git@github.com:atomic14/m5stack-core2-audio-monitor.git
+git clone https://github.com/atomic14/m5stack-core2-audio-monitor.git
 ```
 
 Hopefully, the code should be easy to understand.
