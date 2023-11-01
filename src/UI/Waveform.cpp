@@ -17,12 +17,20 @@ void Waveform::update(const float *samples)
 
 void Waveform::_draw(M5Display &display)
 {
-  float x = 0;
-  float x_step = (float)width / (float)m_num_samples;
+  const float x_step = (float)width / (float)m_num_samples;
+  const float y_offset = 60;
+
   display.fillRect(x, y, width, height, 0);
+  // display.drawLine(x, y_offset, x + width, y_offset, 0xf000);
+
+  float sample_x = 0;
   for (int i = 4; i < m_num_samples; i += 4) {
-    display.drawLine(x, 60 + m_samples[i - 4] * 3, x + x_step * 4, 60 + m_samples[i] * 3, 0xfff);
-    x += x_step * 4;
+    display.drawLine(sample_x,
+                     y_offset + m_samples[i - 4] * 3,
+                     sample_x + x_step * 4,
+                     y_offset + m_samples[i] * 3,
+                     0xfff);
+    sample_x += x_step * 4;
   }
   // m_sprite->pushSprite(0, 0);
 }
