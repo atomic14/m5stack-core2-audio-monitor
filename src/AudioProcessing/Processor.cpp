@@ -29,11 +29,22 @@ Processor::Processor(int window_size)
 void Processor::update(int16_t *samples)
 {
   int offset = (m_fft_size - m_window_size) / 2;
+  double input_avg = 0.0;
+
   for (int i = 0; i < m_window_size; i++) {
-    m_fft_input[offset + i] = samples[i] / 30.0f;
+    const float input_sample = samples[i] / 30.0f;
+    m_fft_input[offset + i] = input_sample;
+    input_avg += double(input_sample) / double(m_window_size);
   }
+
+  // Remove DC offset.
+  for (int i = 0; i < m_window_size; i++) {
+    m_fft_input[offset + i] -= input_avg;
+  }
+
   // apply the hamming window
   m_hamming_window->applyWindow(m_fft_input);
+
   // do the fft
   kiss_fftr(m_cfg, m_fft_input, reinterpret_cast<kiss_fft_cpx *>(m_fft_output));
 
