@@ -3,7 +3,6 @@
 
 #include "I2SSampler.h"
 
-
 void I2SSampler::addSample(int16_t sample)
 {
   // add the sample to the current audio buffer
@@ -26,21 +25,24 @@ void i2sReaderTask(void *param)
   while (true) {
     // wait for some data to arrive on the queue
     i2s_event_t evt;
-    if (xQueueReceive(sampler->m_i2sQueue, &evt, portMAX_DELAY) == pdPASS) {
-      if (evt.type == I2S_EVENT_RX_DONE) {
-        size_t bytesRead = 0;
-        do {
-          // read data from the I2S peripheral
-          int16_t i2sData[2048];
-          // read from i2s
-          i2s_read(sampler->m_i2sPort, i2sData, 4096, &bytesRead, 10);
-          for (int i = 0; i < bytesRead / 2; i += 4) {
-            sampler->addSample((i2sData[i] + i2sData[i + 1] + i2sData[i + 2] + i2sData[i + 3]) /
-                               4);
-          }
-        } while (bytesRead > 0);
-      }
+    if (xQueueReceive(sampler->m_i2sQueue, &evt, portMAX_DELAY) != pdPASS) {
+      continue;
     }
+
+    if (evt.type != I2S_EVENT_RX_DONE) {
+      continue;
+    }
+
+    size_t bytesRead = 0;
+    do {
+      // read data from the I2S peripheral
+      int16_t i2sData[2048];
+      // read from i2s
+      i2s_read(sampler->m_i2sPort, i2sData, 4096, &bytesRead, 10);
+      for (int i = 0; i < bytesRead / 2; i += 4) {
+        sampler->addSample((i2sData[i] + i2sData[i + 1] + i2sData[i + 2] + i2sData[i + 3]) / 4);
+      }
+    } while (bytesRead > 0);
   }
 }
 
